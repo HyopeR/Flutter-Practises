@@ -1,7 +1,7 @@
-class Strings {
-  static const String APP_NAME = "Burç Rehberi";
+class Datas {
+  static const String APP_NAME = "Horoscope Guide";
 
-  static const List<String> BURC_ADLARI = [
+  static const List<String> HOROSCOPE_NAMES = [
     "Koc",
     "Boga",
     "Ikizler",
@@ -16,7 +16,7 @@ class Strings {
     "Balik"
   ];
 
-  static const List<String> BURC_TARIHLERI = [
+  static const List<String> HOROSCOPE_DATES = [
     "21 Mart - 20 Nisan",
     "21 Nisan - 21 Mayıs",
     "22 Mayıs - 22 Haziran",
@@ -31,7 +31,7 @@ class Strings {
     "20 Subat - 20 Mart"
   ];
 
-  static const List<String> BURC_GENEL_OZELLIKLERI =[
+  static const List<String> HOROSCOPE_GENERAL_FEATURES =[
     "\tGenel Özellikler\n\n"
         "\tYönetici yıldızınız: Mars\n\n"
         "\tGrubunuz: Ateş\n\n"
@@ -65,7 +65,6 @@ class Strings {
         "\tBurcunuzdan olan ünlüler:  Nükhet Duru, Öztürk Serengil, Salvadore Dali, Karl Marks, Lenin, Sigmund Freud, Shakespare\n\n",
 
     "\tGenel Özellikler\n\n"
-
         "\tYönetici yıldızınız: Merkür\n\n"
         "\tGrubunuz: Hava\n\n"
         "\tUğurlu gününüz: Çarşamba\n\n"
@@ -80,8 +79,6 @@ class Strings {
         "\tAnlaşamadığınız burçlar: Başak, Yay\n\n"
         "\tBaşarılı olacağınız meslekler: Yazarlık, bankacılık, avukatlık, gazetecilik, edebiyatçı\n\n"
         "\tBurcunuzdan olan ünlüler: Adile Naşit, Bülent Ecevit, John F. Kennedy, John Wayne, Schumann\n\n",
-
-
 
     "\tGenel Özellikler\n\n"
         "\tYönetici yıldızınız: Ay\n\n"
@@ -180,7 +177,6 @@ class Strings {
         "\tBurcunuzdan olan ünlüler:  Mehmet Ali Birand, Zeki Müren, Walt Disney, Winston Churchill, Ludwig van Beethoven, Mark Twain\n\n",
 
     "\tGenel Özellikler\n\n"
-
         "\t Yönetici yıldızınız: Satürn\n\n"
         "\t Grubunuz: Toprak\n\n"
         "\t Uğurlu gününüz: Cumartesi\n\n"
@@ -199,7 +195,6 @@ class Strings {
 
 
     "\tGenel Özellikler\n\n"
-
         "\tYönetici yıldızınız: Uranüs\n\n"
         "\t Grubunuz: Hava\n\n"
         "\tUğurlu gününüz: Pazar\n\n"
@@ -218,7 +213,6 @@ class Strings {
 
 
     "\tGenel Özellikler\n\n"
-
         "\t Yönetici yıldızınız: Neptün\n\n"
         "\t Grubunuz: Su\n\n"
         "\t Uğurlu gününüz: Perşembe\n\n"
