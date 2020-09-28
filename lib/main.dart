@@ -19,6 +19,17 @@ class MyApp extends StatelessWidget {
         '/horoscopeList': (context) => HoroscopeList(),
       },
 
+      onGenerateRoute: (RouteSettings settings) {
+        List<String> pathElements = settings.name.split('/');
+
+        if(pathElements[1] == 'horoscopeDetail') {
+          return MaterialPageRoute(builder: (context) => HoroscopeDetail(int.parse(pathElements[2])));
+        }
+
+        return null;
+
+      },
+
       theme: ThemeData(
         primarySwatch: Colors.pink,
       ),

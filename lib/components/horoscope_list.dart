@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
-import './horoscope_detail.dart';
 
 import '../utils/data.dart';
 import '../models/horoscope.dart';
 
 class HoroscopeList extends StatelessWidget {
 
-  List<Horoscope> horoscopes;
+  /// Eğer bir sınıfın içerisindeki bir veriye diğer componentlerden direkt olarak erişmek istiyorsak
+  /// doldurmuş olduğumuz veriyi static olarak belirleyerek diğer componentlerden bu veriye ulaşabiliriz.
+  static List<Horoscope> horoscopes;
 
   @override
   Widget build(BuildContext context) {
@@ -14,7 +15,7 @@ class HoroscopeList extends StatelessWidget {
     horoscopes = getHoroscopes();
 
     return Scaffold(
-      appBar: AppBar(title: Text('Horoscope Guide')),
+      appBar: AppBar(title: Text('Horoscope Guide'), centerTitle: true,),
       body: prepareHoroscopeList(),
     );
   }
@@ -64,7 +65,7 @@ class HoroscopeList extends StatelessWidget {
         padding: EdgeInsets.all(3.0),
         child: ListTile(
 
-          // onTap: () => { Navigator.pushNamed(context, '/horoscopeDetail/$index') },
+          onTap: () => { Navigator.pushNamed(context, '/horoscopeDetail/$index') },
           // onTap: () => Navigator.push(context, MaterialPageRoute(builder: (context) => HoroscopeDetail())),
 
           leading: Image.asset(
