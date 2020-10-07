@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -30,6 +31,15 @@ class _MyHomePageState extends State<MyHomePage> {
   int lessonCredit = 1;
   double lessonCharValue = 4;
 
+  List<Lesson> lessons;
+  var formKey = GlobalKey<FormState>();
+
+  @override
+  void initState() {
+    super.initState();
+    lessons = [];
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -43,7 +53,7 @@ class _MyHomePageState extends State<MyHomePage> {
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.add),
         onPressed: () {
-
+          formKey.currentState.validate() ? formKey.currentState.save() : null;
         },
       ),
 
@@ -63,13 +73,12 @@ class _MyHomePageState extends State<MyHomePage> {
             child: Container(
               // width: double.maxFinite,
               padding: EdgeInsets.all(10),
-              color: Colors.grey[200],
               child: Form(
+                key: formKey,
 
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: <Widget>[
-
                     Container(
                       alignment: Alignment.topLeft,
                       padding: EdgeInsets.only(left: 5, top: 5),
@@ -85,24 +94,29 @@ class _MyHomePageState extends State<MyHomePage> {
                     ),
 
                     Divider(thickness: 2, color: Colors.grey[400]),
+                    SizedBox(height: 15),
 
                     TextFormField(
                       decoration: InputDecoration(
                           labelText: 'Ders Adı',
                           labelStyle: TextStyle(fontSize: 20),
                           hintText: 'Ders adını giriniz',
-                          border: OutlineInputBorder(
-                            borderSide: BorderSide(
-                              color: Colors.grey[400],
-                              width: 2,
-                            ),
-                            borderRadius: BorderRadius.all(Radius.circular(10))
-                          )
+                          border: OutlineInputBorder(),
+                          enabledBorder: OutlineInputBorder(
+                              borderSide: BorderSide(
+                                color: Colors.grey[400],
+                                width: 2
+                              ),
+                              borderRadius: BorderRadius.all(Radius.circular(10))
+                          ),
                       ),
 
                       validator: (value) => value.length < 0 ? 'Ders adı boş olamaz.' : null,
 
-                      onSaved: (value) => setState(() => lessonName = value),
+                      onSaved: (value) {
+                        setState(() => lessonName = value);
+                        lessons.add(Lesson(lessonName, lessonCharValue, lessonCredit));
+                      },
                     ),
 
                     Row(
@@ -112,7 +126,8 @@ class _MyHomePageState extends State<MyHomePage> {
                           flex: 1,
                           child: Container(
                             padding: EdgeInsets.all(5),
-                            margin: EdgeInsets.only(right: 3, top: 10),
+                            margin: EdgeInsets.only(top: 10),
+                            height: 50,
                             decoration: BoxDecoration(
                               border: Border.all(color: Colors.grey[400], width: 2),
                               borderRadius: BorderRadius.all(Radius.circular(10))
@@ -133,6 +148,7 @@ class _MyHomePageState extends State<MyHomePage> {
                           child: Container(
                             padding: EdgeInsets.all(5),
                             margin: EdgeInsets.only(left: 3, top: 10),
+                            height: 50,
                             decoration: BoxDecoration(
                                 border: Border.all(color: Colors.grey[400], width: 2),
                                 borderRadius: BorderRadius.all(Radius.circular(10))
@@ -146,7 +162,23 @@ class _MyHomePageState extends State<MyHomePage> {
                               onChanged: (value) => setState(() => lessonCharValue = value),
                             ),
                           ),
-                        )
+                        ),
+
+                        Expanded(
+                          flex: 2,
+                          child: Container(
+                            alignment: Alignment.centerLeft,
+                            padding: EdgeInsets.all(5),
+                            margin: EdgeInsets.only(left: 3, top: 10),
+                              height: 50,
+                              decoration: BoxDecoration(
+                                border: Border.all(color: Colors.grey[400], width: 2),
+                                borderRadius: BorderRadius.all(Radius.circular(10))
+                            ),
+
+                            child: Text('Ortalama: ', style: TextStyle(fontSize: 18))
+                            ),
+                          ),
 
                       ],
                     ),
@@ -162,16 +194,12 @@ class _MyHomePageState extends State<MyHomePage> {
             child: Container(
               // width: double.maxFinite,
               padding: EdgeInsets.all(10),
-              color: Colors.grey[300],
-              child: ListView(
-                children: <Widget>[
-
-                  Text('List')
-
-                ],
+              child: ListView.builder(
+                  itemBuilder: _createListItem,
+                  itemCount: lessons.length,
+                )
               ),
             ),
-          )
 
 
         ],
@@ -189,7 +217,7 @@ class _MyHomePageState extends State<MyHomePage> {
       creditItems.add(
           DropdownMenuItem<int> (
             value: i,
-            child: Text('$i Kredi', style: TextStyle(fontSize: 20),),
+            child: Text('$i Kredi', style: TextStyle(fontSize: 18),),
           )
       );
     }
@@ -200,16 +228,41 @@ class _MyHomePageState extends State<MyHomePage> {
   List<DropdownMenuItem<double>> lessonCharValueItems() {
 
     List<DropdownMenuItem<double>> lessonCharItems = [];
-    lessonCharItems.add(DropdownMenuItem(child: Text('AA', style: TextStyle(fontSize: 20)), value: 4));
-    lessonCharItems.add(DropdownMenuItem(child: Text('BA', style: TextStyle(fontSize: 20)), value: 3.5));
-    lessonCharItems.add(DropdownMenuItem(child: Text('BB', style: TextStyle(fontSize: 20)), value: 3));
-    lessonCharItems.add(DropdownMenuItem(child: Text('CB', style: TextStyle(fontSize: 20)), value: 2.5));
-    lessonCharItems.add(DropdownMenuItem(child: Text('CC', style: TextStyle(fontSize: 20)), value: 2));
-    lessonCharItems.add(DropdownMenuItem(child: Text('DC', style: TextStyle(fontSize: 20)), value: 1.5));
-    lessonCharItems.add(DropdownMenuItem(child: Text('DD', style: TextStyle(fontSize: 20)), value: 1));
-    lessonCharItems.add(DropdownMenuItem(child: Text('FF', style: TextStyle(fontSize: 20)), value: 0));
+    lessonCharItems.add(DropdownMenuItem(child: Text('AA', style: TextStyle(fontSize: 18)), value: 4));
+    lessonCharItems.add(DropdownMenuItem(child: Text('BA', style: TextStyle(fontSize: 18)), value: 3.5));
+    lessonCharItems.add(DropdownMenuItem(child: Text('BB', style: TextStyle(fontSize: 18)), value: 3));
+    lessonCharItems.add(DropdownMenuItem(child: Text('CB', style: TextStyle(fontSize: 18)), value: 2.5));
+    lessonCharItems.add(DropdownMenuItem(child: Text('CC', style: TextStyle(fontSize: 18)), value: 2));
+    lessonCharItems.add(DropdownMenuItem(child: Text('DC', style: TextStyle(fontSize: 18)), value: 1.5));
+    lessonCharItems.add(DropdownMenuItem(child: Text('DD', style: TextStyle(fontSize: 18)), value: 1));
+    lessonCharItems.add(DropdownMenuItem(child: Text('FF', style: TextStyle(fontSize: 18)), value: 0));
 
     return lessonCharItems;
 
   }
+
+  Widget _createListItem(BuildContext context, int index){
+
+    return Card(
+      elevation: 2.5,
+      child: ListTile(
+        contentPadding: EdgeInsets.all(5),
+        title: Text(lessons[index].name),
+        subtitle: Text('Kredi Değeri: ${lessons[index].creditValue.toString()}\nHarf Değeri: ${lessons[index].charValue.toString()}'),
+      ),
+    );
+
+  }
+
+
+}
+
+class Lesson {
+
+  String name;
+  double charValue;
+  int creditValue;
+
+  Lesson(this.name, this.charValue, this.creditValue);
+
 }
