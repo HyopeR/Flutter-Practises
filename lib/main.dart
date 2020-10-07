@@ -57,7 +57,11 @@ class _MyHomePageState extends State<MyHomePage> {
           formKey.currentState.validate() ? formKey.currentState.save() : null;
         },
       ),
-      body: applicationBody(),
+      body: OrientationBuilder(
+          builder: (context, orientation) => orientation == Orientation.portrait
+            ? applicationBody()
+            : applicationBodyLandscape()
+      ),
     );
   }
 
@@ -66,10 +70,147 @@ class _MyHomePageState extends State<MyHomePage> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: <Widget>[
+          Container(
+            // width: double.maxFinite,
+            padding: EdgeInsets.all(10),
+            child: Form(
+              key: formKey,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: <Widget>[
+                  Container(
+                    alignment: Alignment.topLeft,
+                    padding: EdgeInsets.only(left: 5, top: 5),
+                    child: Row(
+                      children: <Widget>[
+                        Icon(Icons.book),
+                        SizedBox(width: 5),
+                        Text('Ders Formu',
+                            style: TextStyle(
+                                fontSize: 20,
+                                color: Colors.black,
+                                fontWeight: FontWeight.w500))
+                      ],
+                    ),
+                  ),
+                  Divider(thickness: 2, color: Colors.grey[400]),
+                  SizedBox(height: 15),
+                  TextFormField(
+                    decoration: InputDecoration(
+                      labelText: 'Ders Adı',
+                      labelStyle: TextStyle(fontSize: 20),
+                      hintText: 'Ders adını giriniz',
+                      border: OutlineInputBorder(),
+                      enabledBorder: OutlineInputBorder(
+                          borderSide:
+                              BorderSide(color: Colors.grey[400], width: 2),
+                          borderRadius:
+                              BorderRadius.all(Radius.circular(10))),
+                    ),
+                    validator: (value) =>
+                        value.length < 0 ? 'Ders adı boş olamaz.' : null,
+                    onSaved: (value) {
+                      setState(() => lessonName = value);
+                      lessons.add(Lesson(lessonName, lessonCharValue, lessonCredit));
+                      average = 0;
+                      averageCalculate();
+                    },
+                  ),
+                  Row(
+                    children: <Widget>[
+                      Expanded(
+                        flex: 1,
+                        child: Container(
+                          padding: EdgeInsets.all(5),
+                          margin: EdgeInsets.only(top: 10),
+                          height: 50,
+                          decoration: BoxDecoration(
+                              border: Border.all(
+                                  color: Colors.grey[400], width: 2),
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(10))),
+                          child: DropdownButton<int>(
+                            isExpanded: true,
+                            underline: Container(),
+                            items: lessonCreditItems(),
+                            value: lessonCredit,
+                            onChanged: (value) =>
+                                setState(() => lessonCredit = value),
+                          ),
+                        ),
+                      ),
+                      Expanded(
+                        flex: 1,
+                        child: Container(
+                          padding: EdgeInsets.all(5),
+                          margin: EdgeInsets.only(left: 3, top: 10),
+                          height: 50,
+                          decoration: BoxDecoration(
+                              border: Border.all(
+                                  color: Colors.grey[400], width: 2),
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(10))),
+                          child: DropdownButton<double>(
+                            isExpanded: true,
+                            underline: Container(),
+                            items: lessonCharValueItems(),
+                            value: lessonCharValue,
+                            onChanged: (value) =>
+                                setState(() => lessonCharValue = value),
+                          ),
+                        ),
+                      ),
+                      Expanded(
+                        flex: 2,
+                        child: Container(
+                          alignment: Alignment.centerLeft,
+                          padding: EdgeInsets.all(5),
+                          margin: EdgeInsets.only(left: 3, top: 10),
+                          height: 50,
+                          decoration: BoxDecoration(
+                              border: Border.all(
+                                  color: Colors.grey[400], width: 2),
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(10))),
+                          child: Text.rich(
+                            TextSpan(
+                              children: [
+                                TextSpan(text: 'Ortalama: ', style: TextStyle(color: Colors.black, fontSize: 18)),
+                                TextSpan(text: lessons.length > 0 ? '${average.toStringAsFixed(2)}' : '0', style: TextStyle(color: Colors.green, fontSize: 18, fontWeight: FontWeight.bold)),
+                              ]
+                            )
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+          ),
+          Expanded(
+            flex: 2,
+            child: Container(
+                // width: double.maxFinite,
+                padding: EdgeInsets.all(10),
+                child: ListView.builder(
+                  itemBuilder: _createListItem,
+                  itemCount: lessons.length,
+                )),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget applicationBodyLandscape() {
+    return Container(
+      child: Row(
+        children: [
+
           Expanded(
             flex: 1,
-            child: Container(
-              // width: double.maxFinite,
+            child: Padding(
               padding: EdgeInsets.all(10),
               child: Form(
                 key: formKey,
@@ -101,12 +242,12 @@ class _MyHomePageState extends State<MyHomePage> {
                         border: OutlineInputBorder(),
                         enabledBorder: OutlineInputBorder(
                             borderSide:
-                                BorderSide(color: Colors.grey[400], width: 2),
+                            BorderSide(color: Colors.grey[400], width: 2),
                             borderRadius:
-                                BorderRadius.all(Radius.circular(10))),
+                            BorderRadius.all(Radius.circular(10))),
                       ),
                       validator: (value) =>
-                          value.length < 0 ? 'Ders adı boş olamaz.' : null,
+                      value.length < 0 ? 'Ders adı boş olamaz.' : null,
                       onSaved: (value) {
                         setState(() => lessonName = value);
                         lessons.add(Lesson(lessonName, lessonCharValue, lessonCredit));
@@ -114,93 +255,83 @@ class _MyHomePageState extends State<MyHomePage> {
                         averageCalculate();
                       },
                     ),
-                    Row(
-                      children: <Widget>[
-                        Expanded(
-                          flex: 1,
-                          child: Container(
-                            padding: EdgeInsets.all(5),
-                            margin: EdgeInsets.only(top: 10),
-                            height: 50,
-                            decoration: BoxDecoration(
-                                border: Border.all(
-                                    color: Colors.grey[400], width: 2),
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(10))),
-                            child: DropdownButton<int>(
-                              isExpanded: true,
-                              underline: Container(),
-                              items: lessonCreditItems(),
-                              value: lessonCredit,
-                              onChanged: (value) =>
-                                  setState(() => lessonCredit = value),
-                            ),
-                          ),
-                        ),
-                        Expanded(
-                          flex: 1,
-                          child: Container(
-                            padding: EdgeInsets.all(5),
-                            margin: EdgeInsets.only(left: 3, top: 10),
-                            height: 50,
-                            decoration: BoxDecoration(
-                                border: Border.all(
-                                    color: Colors.grey[400], width: 2),
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(10))),
-                            child: DropdownButton<double>(
-                              isExpanded: true,
-                              underline: Container(),
-                              items: lessonCharValueItems(),
-                              value: lessonCharValue,
-                              onChanged: (value) =>
-                                  setState(() => lessonCharValue = value),
-                            ),
-                          ),
-                        ),
-                        Expanded(
-                          flex: 2,
-                          child: Container(
-                            alignment: Alignment.centerLeft,
-                            padding: EdgeInsets.all(5),
-                            margin: EdgeInsets.only(left: 3, top: 10),
-                            height: 50,
-                            decoration: BoxDecoration(
-                                border: Border.all(
-                                    color: Colors.grey[400], width: 2),
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(10))),
-                            child: Text.rich(
-                              TextSpan(
-                                children: [
-                                  TextSpan(text: 'Ortalama: ', style: TextStyle(color: Colors.black, fontSize: 18)),
-                                  TextSpan(text: lessons.length > 0 ? '${average.toStringAsFixed(2)}' : '0', style: TextStyle(color: Colors.green, fontSize: 18, fontWeight: FontWeight.bold)),
-                                ]
-                              )
-                            ),
-                          ),
-                        ),
-                      ],
+                    Container(
+                      padding: EdgeInsets.all(5),
+                      margin: EdgeInsets.only(top: 10),
+                      height: 50,
+                      decoration: BoxDecoration(
+                          border: Border.all(
+                              color: Colors.grey[400], width: 2),
+                          borderRadius:
+                          BorderRadius.all(Radius.circular(10))),
+                      child: DropdownButton<int>(
+                        isExpanded: true,
+                        underline: Container(),
+                        items: lessonCreditItems(),
+                        value: lessonCredit,
+                        onChanged: (value) =>
+                            setState(() => lessonCredit = value),
+                      ),
+                    ),
+                    Container(
+                      padding: EdgeInsets.all(5),
+                      margin: EdgeInsets.only(left: 3, top: 10),
+                      height: 50,
+                      decoration: BoxDecoration(
+                          border: Border.all(
+                              color: Colors.grey[400], width: 2),
+                          borderRadius:
+                          BorderRadius.all(Radius.circular(10))),
+                      child: DropdownButton<double>(
+                        isExpanded: true,
+                        underline: Container(),
+                        items: lessonCharValueItems(),
+                        value: lessonCharValue,
+                        onChanged: (value) =>
+                            setState(() => lessonCharValue = value),
+                      ),
+                    ),
+                    Container(
+                      alignment: Alignment.centerLeft,
+                      padding: EdgeInsets.all(5),
+                      margin: EdgeInsets.only(left: 3, top: 10),
+                      height: 50,
+                      decoration: BoxDecoration(
+                          border: Border.all(
+                              color: Colors.grey[400], width: 2),
+                          borderRadius:
+                          BorderRadius.all(Radius.circular(10))),
+                      child: Text.rich(
+                          TextSpan(
+                              children: [
+                                TextSpan(text: 'Ortalama: ', style: TextStyle(color: Colors.black, fontSize: 18)),
+                                TextSpan(text: lessons.length > 0 ? '${average.toStringAsFixed(2)}' : '0', style: TextStyle(color: Colors.green, fontSize: 18, fontWeight: FontWeight.bold)),
+                              ]
+                          )
+                      ),
                     ),
                   ],
                 ),
               ),
-            ),
+            ) 
           ),
+
           Expanded(
-            flex: 2,
+            flex: 1,
             child: Container(
-                // width: double.maxFinite,
+              // width: double.maxFinite,
                 padding: EdgeInsets.all(10),
                 child: ListView.builder(
                   itemBuilder: _createListItem,
                   itemCount: lessons.length,
                 )),
-          ),
+          )
+
         ],
       ),
     );
   }
+
 
   List<DropdownMenuItem<int>> lessonCreditItems() {
     List<DropdownMenuItem<int>> creditItems = [];
@@ -253,13 +384,18 @@ class _MyHomePageState extends State<MyHomePage> {
         averageCalculate();
       },
 
-      child: Card(
-        elevation: 2.5,
-        child: ListTile(
-          contentPadding: EdgeInsets.all(5),
-          title: Text(lessons[index].name),
-          subtitle: Text(
-              'Kredi Değeri: ${lessons[index].creditValue.toString()}\nHarf Değeri: ${lessons[index].charValue.toString()}'),
+      child: Container(
+        margin: EdgeInsets.only(bottom: 5),
+        child: Card(
+          color: Colors.grey[200],
+          elevation: 2.5,
+          child: ListTile(
+            contentPadding: EdgeInsets.all(5),
+            title: Text(lessons[index].name),
+            trailing: Icon(Icons.arrow_right),
+            subtitle: Text(
+                'Kredi Değeri: ${lessons[index].creditValue.toString()}\nHarf Değeri: ${lessons[index].charValue.toString()}'),
+          ),
         ),
       ),
     );
