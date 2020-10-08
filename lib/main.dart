@@ -18,7 +18,8 @@ class _FashionAppState extends State<FashionApp> {
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         fontFamily: 'Montserrat',
-        primaryColor: Colors.grey.shade200,
+        primaryColor: Colors.white,
+
         accentColor: Colors.brown,
         tabBarTheme: TabBarTheme(
           labelColor: Colors.brown,

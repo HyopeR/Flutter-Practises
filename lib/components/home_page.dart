@@ -1,3 +1,4 @@
+import 'package:fashion_app/components/detail_page.dart';
 import 'package:flutter/material.dart';
 
 class HomePage extends StatefulWidget {
@@ -284,14 +285,23 @@ class _HomePageState extends State<HomePage>
   Widget flexibleImageWrapper(String imagePath) {
     return Flexible(
       flex: 1,
-      child: Container(
-        margin: EdgeInsets.all(3),
-        width: double.infinity,
-        height: double.infinity,
-        decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(5),
-            image: DecorationImage(
-                image: AssetImage(imagePath), fit: BoxFit.cover)),
+      child: InkWell(
+        onTap: () {
+          Navigator.of(context).push(MaterialPageRoute(builder: (context) => DetailPage(imagePath: imagePath)));
+        },
+
+        child: Hero(
+          tag: imagePath,
+          child: Container(
+            margin: EdgeInsets.all(3),
+            width: double.infinity,
+            height: double.infinity,
+            decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(5),
+                image: DecorationImage(
+                    image: AssetImage(imagePath), fit: BoxFit.cover)),
+          ),
+        ),
       ),
     );
   }
