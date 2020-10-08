@@ -151,15 +151,15 @@ class _HomePageState extends State<HomePage>
                     Expanded(
                       child: Row(
                         children: [
-                          flexibleImageWrapper('assets/images/modelgrid1.jpg'),
+                          flexibleImageWrapper('assets/images/modelgrid1.jpg', 'assets/images/jacket.jpg'),
                           Flexible(
                             flex: 1,
                             child: Column(
                               children: [
                                 flexibleImageWrapper(
-                                    'assets/images/modelgrid2.jpg'),
+                                    'assets/images/modelgrid2.jpg', 'assets/images/dress.jpg'),
                                 flexibleImageWrapper(
-                                    'assets/images/modelgrid3.jpg')
+                                    'assets/images/modelgrid3.jpg', 'assets/images/blouse.jpg')
                               ],
                             ),
                           )
@@ -282,12 +282,12 @@ class _HomePageState extends State<HomePage>
     );
   }
 
-  Widget flexibleImageWrapper(String imagePath) {
+  Widget flexibleImageWrapper(String imagePath, String dressPath) {
     return Flexible(
       flex: 1,
       child: InkWell(
         onTap: () {
-          Navigator.of(context).push(MaterialPageRoute(builder: (context) => DetailPage(imagePath: imagePath)));
+          Navigator.of(context).push(MaterialPageRoute(builder: (context) => DetailPage(imagePath: imagePath, dressPath: dressPath,)));
         },
 
         child: Hero(
