@@ -5,7 +5,22 @@ class HomePage extends StatefulWidget {
   _HomePageState createState() => _HomePageState();
 }
 
-class _HomePageState extends State<HomePage> {
+class _HomePageState extends State<HomePage>
+    with SingleTickerProviderStateMixin {
+  TabController tabController;
+
+  @override
+  void initState() {
+    super.initState();
+    tabController = TabController(length: 4, vsync: this);
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    tabController.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -27,6 +42,19 @@ class _HomePageState extends State<HomePage> {
           )
         ],
       ),
+      bottomNavigationBar: Material(
+        color: Colors.white,
+        child: TabBar(
+          indicatorColor: Colors.transparent,
+          controller: tabController,
+          tabs: [
+            Tab(icon: Icon(Icons.home)),
+            Tab(icon: Icon(Icons.shop)),
+            Tab(icon: Icon(Icons.panorama)),
+            Tab(icon: Icon(Icons.more)),
+          ],
+        ),
+      ),
       body: ListView(
         children: <Widget>[
           Container(
@@ -36,20 +64,19 @@ class _HomePageState extends State<HomePage> {
             child: ListView(
               scrollDirection: Axis.horizontal,
               children: <Widget>[
-                modelListElements(
-                    'assets/images/model1.jpg', 'assets/images/chanellogo.jpg'),
+                modelListElements('assets/images/model1.jpg', 'assets/images/chanellogo.jpg'),
                 SizedBox(width: 30),
-                modelListElements('assets/images/model2.jpg',
-                    'assets/images/louisvuitton.jpg'),
+
+                modelListElements('assets/images/model2.jpg', 'assets/images/louisvuitton.jpg'),
                 SizedBox(width: 30),
-                modelListElements('assets/images/model3.jpg',
-                    'assets/images/louisvuitton.jpg'),
+
+                modelListElements('assets/images/model3.jpg', 'assets/images/louisvuitton.jpg'),
                 SizedBox(width: 30),
-                modelListElements(
-                    'assets/images/model4.jpg', 'assets/images/chanellogo.jpg'),
+
+                modelListElements('assets/images/model4.jpg', 'assets/images/chanellogo.jpg'),
                 SizedBox(width: 30),
-                modelListElements('assets/images/model5.jpg',
-                    'assets/images/louisvuitton.jpg'),
+
+                modelListElements('assets/images/model5.jpg', 'assets/images/louisvuitton.jpg'),
               ],
             ),
           ),
@@ -58,7 +85,6 @@ class _HomePageState extends State<HomePage> {
             child: Material(
               borderRadius: BorderRadius.circular(10),
               elevation: 4,
-              // color: Colors.blue.shade200,
               child: Container(
                 padding: EdgeInsets.all(10),
                 height: 650,
@@ -66,7 +92,6 @@ class _HomePageState extends State<HomePage> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: <Widget>[
-
                     // Post Title Area
                     Container(
                       height: 75,
