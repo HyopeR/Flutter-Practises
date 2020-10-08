@@ -30,6 +30,7 @@ class _HomePageState extends State<HomePage> {
       body: ListView(
         children: <Widget>[
           Container(
+            margin: EdgeInsets.symmetric(vertical: 15),
             height: 150,
             width: double.infinity,
             child: ListView(
@@ -53,59 +54,150 @@ class _HomePageState extends State<HomePage> {
             ),
           ),
           Padding(
-            padding: const EdgeInsets.all(10.0),
+            padding: EdgeInsets.all(10.0),
             child: Material(
               borderRadius: BorderRadius.circular(10),
               elevation: 4,
               // color: Colors.blue.shade200,
               child: Container(
                 padding: EdgeInsets.all(10),
-                height: 450,
+                height: 650,
                 width: double.infinity,
-
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: <Widget>[
-                    Flexible(
-                      flex: 1,
-                      child: Container(
-                        height: 75,
-                        child: Row(
-                          children: <Widget>[
-                            Container(
-                              width: 75,
-                              decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(40),
-                                  image: DecorationImage(image: AssetImage('assets/images/model1.jpg'), fit: BoxFit.cover)
+
+                    // Post Title Area
+                    Container(
+                      height: 75,
+                      child: Row(
+                        children: <Widget>[
+                          Container(
+                            width: 75,
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(40),
+                                image: DecorationImage(
+                                    image:
+                                        AssetImage('assets/images/model1.jpg'),
+                                    fit: BoxFit.cover)),
+                          ),
+                          Flexible(
+                            flex: 4,
+                            child: Container(
+                              width: double.infinity,
+                              padding: EdgeInsets.only(left: 10),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Text('Daisy',
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 20)),
+                                  Text('34 mins ago',
+                                      style: TextStyle(
+                                          color: Colors.grey, fontSize: 16)),
+                                ],
                               ),
                             ),
-
-                            Flexible(
-                              flex: 4,
-                              child: Container(
-                                width: double.infinity,
-                                padding: EdgeInsets.only(left: 10),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Text('Daisy', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20)),
-                                    Text('34 mins ago', style: TextStyle(color: Colors.grey, fontSize: 16)),
-                                  ],
-                                ),
-                              ),
+                          ),
+                          Flexible(
+                            flex: 1,
+                            child: Container(
+                              alignment: Alignment.centerRight,
+                              child: Icon(Icons.menu),
                             ),
-
-                            Flexible(
-                              flex: 1,
-                              child: Container(
-                                alignment: Alignment.centerRight,
-                                child: Icon(Icons.menu),
-                              ),
-                            )
-                          ],
-                        ),
+                          )
+                        ],
                       ),
+                    ),
+                    SizedBox(height: 15),
+
+                    // Text Area
+                    Container(
+                      child: Text(
+                          'Integer sit amet urna cursus libero imperdiet cursus. Pellentesque at molestie sem.'
+                          ' Nam feugiat egestas lorem, eu vestibulum urna egestas dapibus. Aliquam ut aliquam massa.'),
+                    ),
+                    SizedBox(height: 15),
+
+                    // Image Area
+                    Expanded(
+                      child: Row(
+                        children: [
+                          flexibleImageWrapper('assets/images/modelgrid1.jpg'),
+                          Flexible(
+                            flex: 1,
+                            child: Column(
+                              children: [
+                                flexibleImageWrapper(
+                                    'assets/images/modelgrid2.jpg'),
+                                flexibleImageWrapper(
+                                    'assets/images/modelgrid3.jpg')
+                              ],
+                            ),
+                          )
+                        ],
+                      ),
+                    ),
+                    SizedBox(height: 15),
+
+                    // Tag Area
+                    Row(
+                      children: [
+                        tagWrapper(('#Louis Vuitton')),
+                        tagWrapper(('#Anthing Tag')),
+                      ],
+                    ),
+
+                    // Divider
+                    Container(
+                      margin: EdgeInsets.symmetric(vertical: 15),
+                      child: Divider(thickness: 1),
+                    ),
+
+                    // Reply, Comment, Like
+                    Row(
+                      children: [
+                        Flexible(
+                          flex: 4,
+                          child: Container(
+                            width: double.infinity,
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                Icon(Icons.reply,
+                                    color: Colors.brown.withOpacity(0.5),
+                                    size: 20),
+                                SizedBox(width: 10),
+                                Text('1.7k'),
+                                SizedBox(width: 20),
+                                Icon(Icons.comment,
+                                    color: Colors.brown.withOpacity(0.5),
+                                    size: 20),
+                                SizedBox(width: 10),
+                                Text('350'),
+                              ],
+                            ),
+                          ),
+                        ),
+                        Flexible(
+                          flex: 1,
+                          child: Container(
+                            width: double.infinity,
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              children: [
+                                Icon(Icons.favorite,
+                                    color: Colors.red.withOpacity(0.8),
+                                    size: 20),
+                                SizedBox(width: 10),
+                                Text('750'),
+                              ],
+                            ),
+                          ),
+                        )
+                      ],
                     )
                   ],
                 ),
@@ -161,6 +253,34 @@ class _HomePageState extends State<HomePage> {
           )
         ],
       ),
+    );
+  }
+
+  Widget flexibleImageWrapper(String imagePath) {
+    return Flexible(
+      flex: 1,
+      child: Container(
+        margin: EdgeInsets.all(3),
+        width: double.infinity,
+        height: double.infinity,
+        decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(5),
+            image: DecorationImage(
+                image: AssetImage(imagePath), fit: BoxFit.cover)),
+      ),
+    );
+  }
+
+  Widget tagWrapper(String tagName) {
+    return Container(
+      padding: EdgeInsets.all(5),
+      margin: EdgeInsets.all(5),
+      height: 35,
+      alignment: Alignment.center,
+      decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(5),
+          color: Colors.brown.withOpacity(0.5)),
+      child: Text(tagName),
     );
   }
 }
