@@ -1,16 +1,7 @@
-# horoscope_guide
+# Flutter Pactises
+Simple flutter projects are included under this repository.
 
-A new Flutter project.
-
-## Getting Started
-
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
-
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+<h3>0- Master Branch (Horoscope Guide)</h3>
+<h3><a href="https://github.com/HyopeR/Flutter-Practises/tree/HoroscopeGuide">1- Horoscope Guide</a></h3>
+<h3><a href="https://github.com/HyopeR/Flutter-Practises/tree/DynamicAverageCalculation">2- Dynamic Average Calculator</a></h3>
+<h3><a href="https://github.com/HyopeR/Flutter-Practises/tree/FashionApp">3- Fashion App</a></h3>
