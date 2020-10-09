@@ -17,195 +17,103 @@
 /// next_evolution : [{"num":"003","name":"Venusaur"}]
 
 class Pokemon {
-  int _id;
-  String _num;
-  String _name;
-  String _img;
-  List<String> _type;
-  String _height;
-  String _weight;
-  String _candy;
-  int _candyCount;
-  String _egg;
-  double _spawnChance;
-  double _avgSpawns;
-  String _spawnTime;
-  List<double> _multipliers;
-  List<String> _weaknesses;
-  List<Prev_evolution> _prevEvolution;
-  List<Next_evolution> _nextEvolution;
-
-  int get id => _id;
-  String get num => _num;
-  String get name => _name;
-  String get img => _img;
-  List<String> get type => _type;
-  String get height => _height;
-  String get weight => _weight;
-  String get candy => _candy;
-  int get candyCount => _candyCount;
-  String get egg => _egg;
-  double get spawnChance => _spawnChance;
-  double get avgSpawns => _avgSpawns;
-  String get spawnTime => _spawnTime;
-  List<double> get multipliers => _multipliers;
-  List<String> get weaknesses => _weaknesses;
-  List<Prev_evolution> get prevEvolution => _prevEvolution;
-  List<Next_evolution> get nextEvolution => _nextEvolution;
+  int id;
+  String num;
+  String name;
+  String img;
+  List<String> type;
+  String height;
+  String weight;
+  String candy;
+  int candyCount;
+  String egg;
+  double spawnChance;
+  double avgSpawns;
+  String spawnTime;
+  List<double> multipliers;
+  List<String> weaknesses;
+  List<Evolution> nextEvolution;
+  List<Evolution> prevEvolution;
 
   Pokemon({
-      int id, 
-      String num, 
-      String name, 
-      String img, 
-      List<String> type, 
-      String height, 
-      String weight, 
-      String candy, 
-      int candyCount, 
-      String egg, 
-      double spawnChance, 
-      double avgSpawns, 
-      String spawnTime, 
-      List<double> multipliers, 
-      List<String> weaknesses, 
-      List<Prev_evolution> prevEvolution, 
-      List<Next_evolution> nextEvolution}){
-    _id = id;
-    _num = num;
-    _name = name;
-    _img = img;
-    _type = type;
-    _height = height;
-    _weight = weight;
-    _candy = candy;
-    _candyCount = candyCount;
-    _egg = egg;
-    _spawnChance = spawnChance;
-    _avgSpawns = avgSpawns;
-    _spawnTime = spawnTime;
-    _multipliers = multipliers;
-    _weaknesses = weaknesses;
-    _prevEvolution = prevEvolution;
-    _nextEvolution = nextEvolution;
+    this.id,
+    this.num,
+    this.name,
+    this.img,
+    this.type,
+    this.height,
+    this.weight,
+    this.candy,
+    this.candyCount,
+    this.egg,
+    this.spawnChance,
+    this.avgSpawns,
+    this.spawnTime,
+    this.multipliers,
+    this.weaknesses,
+    this.nextEvolution,
+    this.prevEvolution,
+  });
+
+  factory Pokemon.fromJson(Map<String, dynamic> json) => new Pokemon(
+    id: json["id"] == null ? null : json["id"],
+    num: json["num"] == null ? null : json["num"],
+    name: json["name"] == null ? null : json["name"],
+    img: json["img"] == null ? null : json["img"],
+    type: json["type"] == null ? null : new List<String>.from(json["type"].map((x) => x)),
+    height: json["height"] == null ? null : json["height"],
+    weight: json["weight"] == null ? null : json["weight"],
+    candy: json["candy"] == null ? null : json["candy"],
+    candyCount: json["candy_count"] == null ? null : json["candy_count"],
+    egg: json["egg"] == null ? null : json["egg"],
+    spawnChance: json["spawn_chance"] == null ? null : json["spawn_chance"].toDouble(),
+    avgSpawns: json["avg_spawns"] == null ? null : json["avg_spawns"].toDouble(),
+    spawnTime: json["spawn_time"] == null ? null : json["spawn_time"],
+    multipliers: json["multipliers"] == null ? null : new List<double>.from(json["multipliers"].map((x) => x.toDouble())),
+    weaknesses: json["weaknesses"] == null ? null : new List<String>.from(json["weaknesses"].map((x) => x)),
+    nextEvolution: json["next_evolution"] == null ? null : new List<Evolution>.from(json["next_evolution"].map((x) => Evolution.fromJson(x))),
+    prevEvolution: json["prev_evolution"] == null ? null : new List<Evolution>.from(json["prev_evolution"].map((x) => Evolution.fromJson(x))),
+  );
+
+  Map<String, dynamic> toJson() => {
+    "id": id == null ? null : id,
+    "num": num == null ? null : num,
+    "name": name == null ? null : name,
+    "img": img == null ? null : img,
+    "type": type == null ? null : new List<dynamic>.from(type.map((x) => x)),
+    "height": height == null ? null : height,
+    "weight": weight == null ? null : weight,
+    "candy": candy == null ? null : candy,
+    "candy_count": candyCount == null ? null : candyCount,
+    "egg": egg == null ? null : egg,
+    "spawn_chance": spawnChance == null ? null : spawnChance,
+    "avg_spawns": avgSpawns == null ? null : avgSpawns,
+    "spawn_time": spawnTime == null ? null : spawnTime,
+    "multipliers": multipliers == null ? null : new List<dynamic>.from(multipliers.map((x) => x)),
+    "weaknesses": weaknesses == null ? null : new List<dynamic>.from(weaknesses.map((x) => x)),
+    "next_evolution": nextEvolution == null ? null : new List<dynamic>.from(nextEvolution.map((x) => x.toJson())),
+    "prev_evolution": prevEvolution == null ? null : new List<dynamic>.from(prevEvolution.map((x) => x.toJson())),
+  };
 }
 
-  Pokemon.fromJson(dynamic json) {
-    _id = json["id"];
-    _num = json["num"];
-    _name = json["name"];
-    _img = json["img"];
-    _type = json["type"] != null ? json["type"].cast<String>() : [];
-    _height = json["height"];
-    _weight = json["weight"];
-    _candy = json["candy"];
-    _candyCount = json["candyCount"];
-    _egg = json["egg"];
-    _spawnChance = json["spawnChance"];
-    _avgSpawns = json["avgSpawns"];
-    _spawnTime = json["spawnTime"];
-    _multipliers = json["multipliers"] != null ? json["multipliers"].cast<double>() : [];
-    _weaknesses = json["weaknesses"] != null ? json["weaknesses"].cast<String>() : [];
-    if (json["prevEvolution"] != null) {
-      _prevEvolution = [];
-      json["prevEvolution"].forEach((v) {
-        _prevEvolution.add(Prev_evolution.fromJson(v));
-      });
-    }
-    if (json["nextEvolution"] != null) {
-      _nextEvolution = [];
-      json["nextEvolution"].forEach((v) {
-        _nextEvolution.add(Next_evolution.fromJson(v));
-      });
-    }
-  }
+class Evolution {
+  String num;
+  String name;
 
-  Map<String, dynamic> toJson() {
-    var map = <String, dynamic>{};
-    map["id"] = _id;
-    map["num"] = _num;
-    map["name"] = _name;
-    map["img"] = _img;
-    map["type"] = _type;
-    map["height"] = _height;
-    map["weight"] = _weight;
-    map["candy"] = _candy;
-    map["candyCount"] = _candyCount;
-    map["egg"] = _egg;
-    map["spawnChance"] = _spawnChance;
-    map["avgSpawns"] = _avgSpawns;
-    map["spawnTime"] = _spawnTime;
-    map["multipliers"] = _multipliers;
-    map["weaknesses"] = _weaknesses;
-    if (_prevEvolution != null) {
-      map["prevEvolution"] = _prevEvolution.map((v) => v.toJson()).toList();
-    }
-    if (_nextEvolution != null) {
-      map["nextEvolution"] = _nextEvolution.map((v) => v.toJson()).toList();
-    }
-    return map;
-  }
+  Evolution({
+    this.num,
+    this.name,
+  });
 
-}
+  factory Evolution.fromJson(Map<String, dynamic> json) =>
+      new Evolution(
+        num: json["num"] == null ? null : json["num"],
+        name: json["name"] == null ? null : json["name"],
+      );
 
-/// num : "003"
-/// name : "Venusaur"
-
-class Next_evolution {
-  String _num;
-  String _name;
-
-  String get num => _num;
-  String get name => _name;
-
-  Next_evolution({
-      String num, 
-      String name}){
-    _num = num;
-    _name = name;
-}
-
-  Next_evolution.fromJson(dynamic json) {
-    _num = json["num"];
-    _name = json["name"];
-  }
-
-  Map<String, dynamic> toJson() {
-    var map = <String, dynamic>{};
-    map["num"] = _num;
-    map["name"] = _name;
-    return map;
-  }
-
-}
-
-/// num : "001"
-/// name : "Bulbasaur"
-
-class Prev_evolution {
-  String _num;
-  String _name;
-
-  String get num => _num;
-  String get name => _name;
-
-  Prev_evolution({
-      String num, 
-      String name}){
-    _num = num;
-    _name = name;
-}
-
-  Prev_evolution.fromJson(dynamic json) {
-    _num = json["num"];
-    _name = json["name"];
-  }
-
-  Map<String, dynamic> toJson() {
-    var map = <String, dynamic>{};
-    map["num"] = _num;
-    map["name"] = _name;
-    return map;
-  }
-
+  Map<String, dynamic> toJson() =>
+      {
+        "num": num == null ? null : num,
+        "name": name == null ? null : name,
+      };
 }

@@ -30,8 +30,10 @@ class _PokemonListState extends State<PokemonList> {
       ),
 
       body: pokedexController
-        ? GridView.builder(
-            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2),
+        ? OrientationBuilder(builder: (context, orientation){
+          int dynamicRowCount = orientation == Orientation.portrait ? 2 : 3;
+          return GridView.builder(
+            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: dynamicRowCount),
             itemCount: pokedex.length,
             itemBuilder: (context, index) {
 
@@ -45,26 +47,32 @@ class _PokemonListState extends State<PokemonList> {
 
                 child: Hero(
                   tag: currentPokemon.img,
-                  child: Card(
-                    elevation: 3,
-                    child: Column(
-                      children: [
+                  child: Container(
+                    padding: EdgeInsets.all(8),
+                    child: Card(
+                      elevation: 3,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
 
-                        Container(
-                          width: 100,
-                          height: 100,
-                          child: FadeInImage.assetNetwork(placeholder: 'assets/images/loading.gif', image: currentPokemon.img),
-                        ),
-                        Text(currentPokemon.name, style: TextStyle(fontSize: 18))
+                          Container(
+                            width: 150,
+                            height: 150,
+                            child: FadeInImage.assetNetwork(placeholder: 'assets/images/loading.gif', image: currentPokemon.img),
+                          ),
+                          Text(currentPokemon.name, style: TextStyle(fontSize: 18))
 
-                      ],
+                        ],
+                      ),
                     ),
                   ),
                 ),
               );
 
             },
-          )
+          );
+
+        })
         : Center(child: CircularProgressIndicator())
     );
   }
@@ -72,9 +80,13 @@ class _PokemonListState extends State<PokemonList> {
   getPokemons() async {
     var response = await http.get(url);
     var decodedJson = jsonDecode(response.body);
+    print('DATAS');
+    print(decodedJson['pokemon'][2]);
 
     setState(() {
       pokedex = (decodedJson['pokemon'] as List).map((pokemon) => Pokemon.fromJson(pokemon)).toList();
+      print('MODAL');
+      print(pokedex[2].toJson());
       pokedexController = true;
     });
 
