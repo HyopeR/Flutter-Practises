@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'package:pokedex/components/pokemon_detail.dart';
 import '../models/Pokemon.dart';
 
 class PokemonList extends StatefulWidget {
@@ -31,7 +32,38 @@ class _PokemonListState extends State<PokemonList> {
       body: pokedexController
         ? GridView.builder(
             gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2),
-            itemBuilder: (context, index) => Text(pokedex[index].name),
+            itemCount: pokedex.length,
+            itemBuilder: (context, index) {
+
+              Pokemon currentPokemon = pokedex[index];
+
+              return InkWell(
+
+                onTap: () {
+                  Navigator.of(context).push(MaterialPageRoute(builder: (context) => PokemonDetail(pokemon: currentPokemon)));
+                },
+
+                child: Hero(
+                  tag: currentPokemon.img,
+                  child: Card(
+                    elevation: 3,
+                    child: Column(
+                      children: [
+
+                        Container(
+                          width: 100,
+                          height: 100,
+                          child: FadeInImage.assetNetwork(placeholder: 'assets/images/loading.gif', image: currentPokemon.img),
+                        ),
+                        Text(currentPokemon.name, style: TextStyle(fontSize: 18))
+
+                      ],
+                    ),
+                  ),
+                ),
+              );
+
+            },
           )
         : Center(child: CircularProgressIndicator())
     );
