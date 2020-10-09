@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:pokedex/components/pokemon_list.dart';
 
 void main() {
   runApp(MyApp());
@@ -11,41 +12,19 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'Pokedex',
       theme: ThemeData(
-        primarySwatch: Colors.blue,
+        appBarTheme: AppBarTheme(
+          color: Colors.orange,
+          textTheme: TextTheme(
+            headline6: TextStyle(color: Colors.white, fontSize: 20),
+          )
+      ),
+        accentColor: Colors.deepOrange.shade400,
+        textTheme: TextTheme(
+          bodyText2: TextStyle(color: Colors.black),
+        ),
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      home: MyHomePage(title: 'Pokedex'),
-    );
-  }
-}
-
-class MyHomePage extends StatefulWidget {
-  MyHomePage({Key key, this.title}) : super(key: key);
-  final String title;
-
-  @override
-  _MyHomePageState createState() => _MyHomePageState();
-}
-
-class _MyHomePageState extends State<MyHomePage> {
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      resizeToAvoidBottomPadding: false,
-      appBar: AppBar(
-        title: Text(widget.title),
-      ),
-
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Text('Pokemon',),
-          ],
-        ),
-      ),
-
+      home: PokemonList(),
     );
   }
 }
