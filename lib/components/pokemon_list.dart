@@ -80,13 +80,9 @@ class _PokemonListState extends State<PokemonList> {
   getPokemons() async {
     var response = await http.get(url);
     var decodedJson = jsonDecode(response.body);
-    print('DATAS');
-    print(decodedJson['pokemon'][2]);
 
     setState(() {
       pokedex = (decodedJson['pokemon'] as List).map((pokemon) => Pokemon.fromJson(pokemon)).toList();
-      print('MODAL');
-      print(pokedex[2].toJson());
       pokedexController = true;
     });
 
