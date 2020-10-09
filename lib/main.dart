@@ -20,7 +20,7 @@ class MyApp extends StatelessWidget {
       ),
         accentColor: Colors.deepOrange.shade400,
         textTheme: TextTheme(
-          bodyText2: TextStyle(color: Colors.black),
+          bodyText2: TextStyle(color: Colors.black, fontSize: 16),
         ),
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
