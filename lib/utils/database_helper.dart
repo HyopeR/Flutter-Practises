@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:flutter/services.dart';
+import 'package:notebook_app/models/category.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:synchronized/synchronized.dart';
@@ -65,10 +66,13 @@ class DatabaseHelper {
 
   }
 
-  getCategories() async {
+  Future<List<Category>> getCategories() async {
     var db = await _getDatabase();
-    var result = await db.query('category');
-    print(result);
+    var categoriesMap = await db.query('category');
+
+    // Type casting.
+    List<Category> categories = categoriesMap.map((category) => Category.fromMap(category)).toList();
+    return categories;
   }
 
 }

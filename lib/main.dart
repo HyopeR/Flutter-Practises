@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:notebook_app/models/category.dart';
 import 'package:notebook_app/utils/database_helper.dart';
 
 void main() {
@@ -15,46 +16,35 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      home: MyHomePage(title: 'Notebook'),
+      home: MyHomePage(),
     );
   }
 }
 
 class MyHomePage extends StatefulWidget {
-  MyHomePage({Key key, this.title}) : super(key: key);
-  final String title;
-
   @override
   _MyHomePageState createState() => _MyHomePageState();
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-
-  DatabaseHelper dbHelper;
+  DatabaseHelper dbHelper = DatabaseHelper();
+  List<Category> categories;
 
   @override
   void initState() {
     super.initState();
-    dbHelper = DatabaseHelper();
+    dbHelper.getCategories().then((dataCategories) => categories = dataCategories);
   }
 
   @override
   Widget build(BuildContext context) {
-
-    dbHelper.getCategories();
-
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.title),
+        title: Text('Notebook'),
       ),
       body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Text(
-              'Notebook application',
-            ),
-          ],
+        child: Text(
+          'Notebook application',
         ),
       ),
     );
