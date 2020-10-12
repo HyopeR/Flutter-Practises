@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:notebook_app/utils/database_helper.dart';
 
 void main() {
   runApp(MyApp());
@@ -29,8 +30,19 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
 
+  DatabaseHelper dbHelper;
+
+  @override
+  void initState() {
+    super.initState();
+    dbHelper = DatabaseHelper();
+  }
+
   @override
   Widget build(BuildContext context) {
+
+    dbHelper.getCategories();
+
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.title),
