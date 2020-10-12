@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:flutter/services.dart';
 import 'package:notebook_app/models/category.dart';
+import 'package:notebook_app/models/note.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:synchronized/synchronized.dart';
@@ -66,6 +67,7 @@ class DatabaseHelper {
 
   }
 
+  // Kategoriler ile ilgili sorgular.
   Future<List<Category>> getCategories() async {
     var db = await _getDatabase();
     var categoriesMap = await db.query('category');
@@ -73,6 +75,60 @@ class DatabaseHelper {
     // Type casting.
     List<Category> categories = categoriesMap.map((category) => Category.fromMap(category)).toList();
     return categories;
+  }
+
+  Future<int> addCategory(Category category) async {
+    var db = await _getDatabase();
+    var result = await db.insert('category', category.toMap());
+
+    return result;
+  }
+
+  Future<int> updateCategory(Category category) async {
+    var db = await _getDatabase();
+    var result = await db.update('category', category.toMap(), where: 'categoryId = ?', whereArgs: [category.categoryId]);
+
+    return result;
+  }
+
+  Future<int> deleteCategory(int categoryId) async {
+    var db = await _getDatabase();
+    var result = await db.delete('category', where: 'categoryId = ?', whereArgs: [categoryId]);
+
+    return result;
+  }
+
+
+
+  // Notlar ile ilgili sorgular.
+  Future<List<Note>> getNotes() async {
+    var db = await _getDatabase();
+    var notesMap = await db.query('note', orderBy: 'noteId DESC');
+
+    // Type casting.
+    List<Note> notes = notesMap.map((note) => Note.fromMap(note)).toList();
+    return notes;
+  }
+
+  Future<int> addNote(Note note) async {
+    var db = await _getDatabase();
+    var result = await db.insert('note', note.toMap());
+
+    return result;
+  }
+
+  Future<int> updateNote(Note note) async {
+    var db = await _getDatabase();
+    var result = await db.update('note', note.toMap(), where: 'noteId = ?', whereArgs: [note.noteId]);
+
+    return result;
+  }
+
+  Future<int> deleteNote(int noteId) async {
+    var db = await _getDatabase();
+    var result = await db.delete('note', where: 'noteId = ?', whereArgs: [noteId]);
+
+    return result;
   }
 
 }
