@@ -58,8 +58,6 @@ class DatabaseHelper {
       await File(path).writeAsBytes(bytes, flush: true);
 
     } else {
-      await File(path).delete(recursive: true);
-      print(path);
       print("Opening existing database");
     }
     // open the database
@@ -79,8 +77,7 @@ class DatabaseHelper {
 
   Future<int> addCategory(Category category) async {
     var db = await _getDatabase();
-    var result = await db.insert('category', category.toMap());
-
+    var result = await db.insert('category', category.toMap(), nullColumnHack: 'categoryId');
     return result;
   }
 

@@ -1,7 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:notebook_app/models/category.dart';
-import 'package:notebook_app/utils/database_helper.dart';
-
 import 'package:notebook_app/components/note_list.dart';
 
 void main() {
@@ -9,6 +6,7 @@ void main() {
 }
 
 class MyApp extends StatelessWidget {
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
