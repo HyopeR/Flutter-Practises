@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:notebook_app/components/category_page.dart';
 import 'package:notebook_app/components/note_detail.dart';
 import 'package:notebook_app/models/category.dart';
 import 'package:notebook_app/models/note.dart';
@@ -13,17 +14,19 @@ class NoteListPage extends StatefulWidget {
 class _NoteListPageState extends State<NoteListPage> {
   DatabaseHelper dbHelper = DatabaseHelper();
   var _scaffoldKey = GlobalKey<ScaffoldState>();
+  var refreshKey = GlobalKey<RefreshIndicatorState>();
 
   List<Note> notes = [];
+  bool notesController = false;
+
   List<String> importanceNames = ['Düşük', 'Orta', 'Yüksek'];
 
   Note selectedNote;
 
-
   @override
   void initState() {
     super.initState();
-    dbHelper.getNotes();
+    getNotes();
   }
 
   @override
@@ -34,6 +37,16 @@ class _NoteListPageState extends State<NoteListPage> {
         appBar: AppBar(
           title: Text('Note Application'),
           centerTitle: true,
+
+          actions: [
+            PopupMenuButton(itemBuilder: (context) => [
+              PopupMenuItem(child: ListTile(
+                onTap: () => goCategoryPage(context),
+                leading: Icon(Icons.category),
+                title: Text('Kategoriler'),
+              )),
+            ])
+          ],
         ),
         floatingActionButton: Column(
           mainAxisAlignment: MainAxisAlignment.end,
@@ -60,77 +73,115 @@ class _NoteListPageState extends State<NoteListPage> {
             children: [
               titleWidget(context, 'Kayıtlı Notlar'),
               Expanded(
-                child: Container(
-                  child: FutureBuilder(
-                    future: dbHelper.getNotes(),
-                    builder: (context, AsyncSnapshot<List<Note>> snapShot) {
-
-                      notes = snapShot.data;
-
-                      if(snapShot.connectionState == ConnectionState.done) {
-                        if(notes.length > 0)
-                          return ListView.builder(
+                  child: Container(
+                child: notesController
+                    ? notes.length > 0
+                        ? RefreshIndicator(
+                            onRefresh: () => getNotes(),
+                            key: refreshKey,
+                            child: ListView.builder(
                                 itemCount: notes.length,
-                                itemBuilder: (context, index) => listItem(index)
-                          );
-                        else
-                          return Center(child: Text('Kayıtlı not bulunmamaktadır.'));
-                      } else
-                          return Center(child: CircularProgressIndicator());
-
-                    },
-                  )
-                ),
-              )
+                                itemBuilder: (context, index) =>
+                                    listItem(index)),
+                          )
+                        : Center(child: Text('Kayıtlı not bulunmamaktadır.'))
+                    : Center(child: CircularProgressIndicator()),
+              )),
             ],
           ),
         ));
   }
 
   Widget listItem(int index) => Container(
-        child: InkWell(
-          onTap: () {},
+        child: Dismissible(
+          key: Key('Note-${notes[index].noteId}'),
+          direction: DismissDirection.startToEnd,
+          confirmDismiss: (DismissDirection direction) async =>
+              await confirmDismiss(direction, notes[index].noteId, index),
           child: ExpansionTile(
             leading: CircleAvatar(
                 backgroundColor: Theme.of(context).accentColor,
                 child: Text(notes[index].noteImportance.toString(),
                     style: TextStyle(
-                        color: Colors.white, fontWeight: FontWeight.bold, fontSize: Theme.of(context).textTheme.headline6.fontSize))),
-            title: Text(notes[index].noteTitle, style: TextStyle(fontWeight: FontWeight.bold)),
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                        fontSize:
+                            Theme.of(context).textTheme.headline6.fontSize))),
+            title: Text(notes[index].noteTitle,
+                style: TextStyle(fontWeight: FontWeight.bold)),
             subtitle: Text('Kategori: ${notes[index].categoryTitle}'),
-            trailing: Icon(Icons.arrow_right),
+            trailing: InkWell(onTap: () => goNoteDetail(context, selectedNote: notes[index]), child: Container(padding: EdgeInsets.all(10), child: Icon(Icons.edit))),
             children: [
-
               Container(
                 padding: EdgeInsets.all(10),
                 child: Column(
-
                   children: [
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Chip(label: Text('Önemlilik: ${importanceNames[(notes[index].noteImportance - 1)] }')),
-                        Chip(label: Text(dbHelper.dateFormat(DateTime.parse(notes[index].noteDate)))),
+                        Chip(
+                            label: Text(
+                                'Önemlilik: ${importanceNames[(notes[index].noteImportance - 1)]}')),
+                        Chip(
+                            label: Text(dbHelper.dateFormat(
+                                DateTime.parse(notes[index].noteDate)))),
                       ],
                     ),
-
                     Container(
                       margin: EdgeInsets.only(top: 10),
                       padding: EdgeInsets.all(5),
-                      child: Text(notes[index].noteContent, style: TextStyle(fontSize: 16),),
+                      child: Text(
+                        notes[index].noteContent,
+                        style: TextStyle(fontSize: 16),
+                      ),
                       alignment: Alignment.topLeft,
-                    )
-
+                    ),
                   ],
-
                 ),
               )
-
             ],
-
           ),
         ),
       );
+
+  Future<bool> confirmDismiss(
+      DismissDirection direction, int noteId, int index) async {
+    return await showDialog<bool>(
+        context: context,
+        barrierDismissible: true,
+        builder: (BuildContext context) => AlertDialog(
+              title: Text('Eylem'),
+              content: SingleChildScrollView(
+                child: ListBody(
+                  children: <Widget>[
+                    Text('Bu notu sileceksiniz. Onaylıyor musunuz?'),
+                  ],
+                ),
+              ),
+              actions: <Widget>[
+                MaterialButton(
+                  child: Text('Evet'),
+                  onPressed: () async {
+                    int result = await dbHelper.deleteNote(noteId);
+                    if (result != -1) {
+                      setState(() {
+                        notes.removeAt(index);
+                      });
+                      Navigator.of(context).pop(true);
+                    } else {
+                      Navigator.pop(context, false);
+                    }
+                  },
+                ),
+                MaterialButton(
+                  child: Text('Hayır'),
+                  onPressed: () {
+                    Navigator.pop(context, false);
+                  },
+                ),
+              ],
+            ));
+  }
 
   void addCategoryDialog(BuildContext context) {
     var formKey = GlobalKey<FormState>();
@@ -141,7 +192,7 @@ class _NoteListPageState extends State<NoteListPage> {
         context: context,
         builder: (context) => SimpleDialog(
               title: Text('Kategori Ekle'),
-              titlePadding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+              titlePadding: EdgeInsets.only(left: 10, right: 10, top: 20),
               titleTextStyle: TextStyle(
                   color: Theme.of(context).primaryColor,
                   fontSize: Theme.of(context).textTheme.headline6.fontSize),
@@ -207,12 +258,30 @@ class _NoteListPageState extends State<NoteListPage> {
             ));
   }
 
-  goNoteDetail(BuildContext context) {
+  goNoteDetail(BuildContext context, {Note selectedNote}) {
     Navigator.push(
         context,
         MaterialPageRoute(
-            builder: (context) => NoteDetailPage(title: 'Not Ekle')));
+            builder: (context) => NoteDetailPage(
+                title: 'Not',
+                note: selectedNote,
+            )));
   }
 
+  goCategoryPage(BuildContext context) {
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) => CategoryPage(
+              title: 'Kategori',
+            )));
+  }
 
+  getNotes() async {
+    List<Note> notesData = await dbHelper.getNotes();
+    setState(() {
+      notes = notesData;
+      notesController = true;
+    });
+  }
 }

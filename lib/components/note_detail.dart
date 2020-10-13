@@ -7,7 +7,9 @@ import 'package:notebook_app/components/common/title_widget.dart';
 
 class NoteDetailPage extends StatefulWidget {
   String title;
-  NoteDetailPage({this.title});
+  Note note;
+
+  NoteDetailPage({this.title, this.note});
 
   @override
   _NoteDetailPageState createState() => _NoteDetailPageState();
@@ -26,10 +28,19 @@ class _NoteDetailPageState extends State<NoteDetailPage> {
   List<Category> categories;
   bool categoriesController = false;
 
+  String typeAction = 'Ekle';
   @override
   void initState() {
     super.initState();
     getCategories();
+    widget.note != null ? setState(() {
+      typeAction = 'Düzenle';
+
+      selectedCategoryId = widget.note.categoryId;
+      noteTitle = widget.note.noteTitle;
+      noteContent = widget.note.noteContent;
+      sliderValue = widget.note.noteImportance.toDouble();
+    }) : null;
   }
 
   @override
@@ -37,7 +48,7 @@ class _NoteDetailPageState extends State<NoteDetailPage> {
     return Scaffold(
       resizeToAvoidBottomPadding: false,
       appBar: AppBar(
-        title: Text(widget.title),
+        title: Text(widget.title + ' ' + typeAction),
         centerTitle: true,
       ),
       body: Container(
@@ -97,6 +108,7 @@ class _NoteDetailPageState extends State<NoteDetailPage> {
                     height: 50,
                     margin: EdgeInsets.symmetric(vertical: 10),
                     child: TextFormField(
+                      initialValue: noteTitle != null ? noteTitle : '',
                       onSaved: (value) => noteTitle = value,
                       validator: (value) => value.length < 1 ? 'Başlık alanı boş olamaz.' : null,
                       decoration: InputDecoration(
@@ -124,6 +136,8 @@ class _NoteDetailPageState extends State<NoteDetailPage> {
                   Container(
                     margin: EdgeInsets.symmetric(vertical: 10),
                     child: TextFormField(
+                      initialValue: noteContent != null ? noteContent : '',
+
                       textAlignVertical: TextAlignVertical.top,
                       maxLines: 4,
 
@@ -263,8 +277,8 @@ class _NoteDetailPageState extends State<NoteDetailPage> {
                             padding: EdgeInsets.all(10),
                             child: MaterialButton(
                               color: Theme.of(context).accentColor,
-                              onPressed: () => addNote(),
-                              child: Text('Kaydet', style: TextStyle(color: Colors.white),),
+                              onPressed: () => typeAction == 'Ekle' ? addNote() : updateNote(),
+                              child: Text(typeAction == 'Ekle' ? 'Kaydet' : 'Güncelle', style: TextStyle(color: Colors.white),),
                             ),
                           ),
                         )
@@ -313,11 +327,29 @@ class _NoteDetailPageState extends State<NoteDetailPage> {
       result != -1
           ? Navigator.of(context).pop()
           : Scaffold.of(context).showSnackBar(SnackBar(
-              content: Text('Not eklenemedi.'),
-              duration: Duration(
-                seconds: 2,
-              ),
-            ));
+        content: Text('Not eklenemedi.'),
+        duration: Duration(
+          seconds: 2,
+        ),
+      ));
+    }
+
+  }
+
+  void updateNote() async {
+
+    if(formKey.currentState.validate()) {
+      formKey.currentState.save();
+
+      int result = await dbHelper.updateNote(Note.withId(widget.note.noteId, selectedCategoryId, noteTitle, noteContent, widget.note.noteDate, sliderValue.toInt()));
+      result != -1
+          ? Navigator.of(context).pop()
+          : Scaffold.of(context).showSnackBar(SnackBar(
+        content: Text('Not güncellenemedi.'),
+        duration: Duration(
+          seconds: 2,
+        ),
+      ));
     }
 
   }
