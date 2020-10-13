@@ -33,6 +33,10 @@ class DatabaseHelper {
     }
   }
 
+  Future onConfigure(Database db) async {
+    await db.execute('PRAGMA foreign_keys = ON');
+  }
+
   Future<Database> _initializeDatabase() async {
     var databasesPath = await getDatabasesPath();
     var path = join(databasesPath, "notes.db");
@@ -61,7 +65,7 @@ class DatabaseHelper {
       print("Opening existing database");
     }
     // open the database
-    return await openDatabase(path, readOnly: false);
+    return await openDatabase(path, readOnly: false, onConfigure: onConfigure);
 
   }
 
@@ -124,6 +128,7 @@ class DatabaseHelper {
 
   Future<int> deleteNote(int noteId) async {
     var db = await _getDatabase();
+    // query.CommandText = "PRAGMA foreign_keys = ON;";
     var result = await db.delete('note', where: 'noteId = ?', whereArgs: [noteId]);
 
     return result;
