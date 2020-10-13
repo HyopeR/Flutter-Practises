@@ -14,15 +14,16 @@ class _NoteListPageState extends State<NoteListPage> {
   DatabaseHelper dbHelper = DatabaseHelper();
   var _scaffoldKey = GlobalKey<ScaffoldState>();
 
-  List<Note> notes;
-  bool notesController = false;
+  List<Note> notes = [];
+  List<String> importanceNames = ['Düşük', 'Orta', 'Yüksek'];
 
   Note selectedNote;
+
 
   @override
   void initState() {
     super.initState();
-    getNotes();
+    dbHelper.getNotes();
   }
 
   @override
@@ -60,13 +61,25 @@ class _NoteListPageState extends State<NoteListPage> {
               titleWidget(context, 'Kayıtlı Notlar'),
               Expanded(
                 child: Container(
-                  child: notesController
-                      ? notes.length > 0
-                          ? ListView.builder(
-                              itemCount: notes.length,
-                              itemBuilder: (context, index) => listItem(index))
-                          : Center(child: Text('Kayıtlı not bulunmamaktadır.'))
-                      : Center(child: CircularProgressIndicator()),
+                  child: FutureBuilder(
+                    future: dbHelper.getNotes(),
+                    builder: (context, AsyncSnapshot<List<Note>> snapShot) {
+
+                      notes = snapShot.data;
+
+                      if(snapShot.connectionState == ConnectionState.done) {
+                        if(notes.length > 0)
+                          return ListView.builder(
+                                itemCount: notes.length,
+                                itemBuilder: (context, index) => listItem(index)
+                          );
+                        else
+                          return Center(child: Text('Kayıtlı not bulunmamaktadır.'));
+                      } else
+                          return Center(child: CircularProgressIndicator());
+
+                    },
+                  )
                 ),
               )
             ],
@@ -77,15 +90,44 @@ class _NoteListPageState extends State<NoteListPage> {
   Widget listItem(int index) => Container(
         child: InkWell(
           onTap: () {},
-          child: ListTile(
+          child: ExpansionTile(
             leading: CircleAvatar(
                 backgroundColor: Theme.of(context).accentColor,
                 child: Text(notes[index].noteImportance.toString(),
                     style: TextStyle(
                         color: Colors.white, fontWeight: FontWeight.bold, fontSize: Theme.of(context).textTheme.headline6.fontSize))),
-            title: Text(notes[index].noteTitle),
-            subtitle: Text(notes[index].noteContent),
+            title: Text(notes[index].noteTitle, style: TextStyle(fontWeight: FontWeight.bold)),
+            subtitle: Text('Kategori: ${notes[index].categoryTitle}'),
             trailing: Icon(Icons.arrow_right),
+            children: [
+
+              Container(
+                padding: EdgeInsets.all(10),
+                child: Column(
+
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Chip(label: Text('Önemlilik: ${importanceNames[(notes[index].noteImportance - 1)] }')),
+                        Chip(label: Text(dbHelper.dateFormat(DateTime.parse(notes[index].noteDate)))),
+                      ],
+                    ),
+
+                    Container(
+                      margin: EdgeInsets.only(top: 10),
+                      padding: EdgeInsets.all(5),
+                      child: Text(notes[index].noteContent, style: TextStyle(fontSize: 16),),
+                      alignment: Alignment.topLeft,
+                    )
+
+                  ],
+
+                ),
+              )
+
+            ],
+
           ),
         ),
       );
@@ -172,12 +214,5 @@ class _NoteListPageState extends State<NoteListPage> {
             builder: (context) => NoteDetailPage(title: 'Not Ekle')));
   }
 
-  getNotes() async {
-    List<Note> notesData = await dbHelper.getNotes();
-    print(notesData);
-    setState(() {
-      notes = notesData;
-      notesController = true;
-    });
-  }
+
 }

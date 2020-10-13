@@ -100,7 +100,7 @@ class DatabaseHelper {
   // Notlar ile ilgili sorgular.
   Future<List<Note>> getNotes() async {
     var db = await _getDatabase();
-    var notesMap = await db.query('note', orderBy: 'noteId DESC');
+    var notesMap = await db.rawQuery('SELECT * FROM note LEFT JOIN category ON note.categoryId = category.categoryId ORDER BY noteId DESC');
 
     // Type casting.
     List<Note> notes = notesMap.map((note) => Note.fromMap(note)).toList();
@@ -109,7 +109,6 @@ class DatabaseHelper {
 
   Future<int> addNote(Note note) async {
     var db = await _getDatabase();
-    print(note.toMap());
     var mapNote = note.toMap().remove('noteDate');
     var result = await db.insert('note', note.toMap());
 

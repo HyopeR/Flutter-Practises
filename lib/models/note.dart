@@ -2,6 +2,7 @@ class Note {
 
   int noteId;
   int categoryId;
+  String categoryTitle;
   String noteTitle;
   String noteContent;
   String noteDate;
@@ -39,6 +40,7 @@ class Note {
   Note.fromMap(Map<String, dynamic> map) {
     this.noteId = map['noteId'];
     this.categoryId = map['categoryId'];
+    this.categoryTitle = map['categoryTitle'];
     this.noteTitle = map['noteTitle'];
     this.noteContent = map['noteContent'];
     this.noteDate = map['noteDate'];
