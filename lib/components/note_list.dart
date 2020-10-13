@@ -74,19 +74,19 @@ class _NoteListPageState extends State<NoteListPage> {
               titleWidget(context, 'Kayıtlı Notlar'),
               Expanded(
                   child: Container(
-                child: notesController
+                child: RefreshIndicator(
+                  onRefresh: () => getNotes(),
+                  key: refreshKey,
+                  child: notesController
                     ? notes.length > 0
-                        ? RefreshIndicator(
-                            onRefresh: () => getNotes(),
-                            key: refreshKey,
-                            child: ListView.builder(
+                        ? ListView.builder(
                                 itemCount: notes.length,
                                 itemBuilder: (context, index) =>
-                                    listItem(index)),
-                          )
-                        : Center(child: Text('Kayıtlı not bulunmamaktadır.'))
+                                    listItem(index)
+                            )
+                        : ListView(children: [ Text('Kayıtlı not bulunmamaktadır.') ],)
                     : Center(child: CircularProgressIndicator()),
-              )),
+                ))),
             ],
           ),
         ));
@@ -279,6 +279,9 @@ class _NoteListPageState extends State<NoteListPage> {
 
   getNotes() async {
     List<Note> notesData = await dbHelper.getNotes();
+
+    print(notesData);
+
     setState(() {
       notes = notesData;
       notesController = true;

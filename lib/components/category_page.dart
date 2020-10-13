@@ -40,7 +40,6 @@ class _CategoryPageState extends State<CategoryPage> with SingleTickerProviderSt
 
   @override
   Widget build(BuildContext context) {
-    print('hello');
 
     return Scaffold(
       resizeToAvoidBottomPadding: false,
