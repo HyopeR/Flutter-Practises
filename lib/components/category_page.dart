@@ -84,8 +84,10 @@ class _CategoryPageState extends State<CategoryPage> with SingleTickerProviderSt
   }
 
   Widget categoriesList() => Container(
+    padding: EdgeInsets.all(10),
     child: Column(
       children: [
+        titleWidget(context, 'Kategori Listesi'),
         Expanded(
           child: Container(
               child: categoriesController
