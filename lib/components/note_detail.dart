@@ -1,11 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:notebook_app/models/category.dart';
+import 'package:notebook_app/models/note.dart';
 import 'package:notebook_app/utils/database_helper.dart';
+import 'package:notebook_app/components/common/title_widget.dart';
 
 class NoteDetailPage extends StatefulWidget {
   String title;
-
   NoteDetailPage({this.title});
 
   @override
@@ -16,7 +17,10 @@ class _NoteDetailPageState extends State<NoteDetailPage> {
   DatabaseHelper dbHelper = DatabaseHelper();
 
   var formKey = GlobalKey<FormState>();
+
   int selectedCategoryId = 1;
+  String noteTitle;
+  String noteContent;
   double sliderValue = 1.0;
 
   List<Category> categories;
@@ -47,7 +51,7 @@ class _NoteDetailPageState extends State<NoteDetailPage> {
                 children: [
 
                   // Kategori Seçme Row
-                  titleWidget('Not Ekleme'),
+                  titleWidget(context, 'Not'),
                   Container(
                       height: 50,
                       margin: EdgeInsets.symmetric(vertical: 10),
@@ -93,6 +97,8 @@ class _NoteDetailPageState extends State<NoteDetailPage> {
                     height: 50,
                     margin: EdgeInsets.symmetric(vertical: 10),
                     child: TextFormField(
+                      onSaved: (value) => noteTitle = value,
+                      validator: (value) => value.length < 1 ? 'Başlık alanı boş olamaz.' : null,
                       decoration: InputDecoration(
                         hintText: 'Başlık Giriniz',
                         labelText: 'Başlık',
@@ -121,6 +127,7 @@ class _NoteDetailPageState extends State<NoteDetailPage> {
                       textAlignVertical: TextAlignVertical.top,
                       maxLines: 4,
 
+                      onSaved: (value) => noteContent = value,
                       decoration: InputDecoration(
                         alignLabelWithHint: true,
                         hintText: 'İçerik Giriniz',
@@ -242,7 +249,9 @@ class _NoteDetailPageState extends State<NoteDetailPage> {
                             padding: EdgeInsets.all(10),
                             child: MaterialButton(
                               color: Theme.of(context).accentColor,
-                              onPressed: () {},
+                              onPressed: () {
+                                Navigator.pop(context);
+                              },
                               child: Text('Vazgeç', style: TextStyle(color: Colors.white),),
                             ),
                           ),
@@ -254,7 +263,7 @@ class _NoteDetailPageState extends State<NoteDetailPage> {
                             padding: EdgeInsets.all(10),
                             child: MaterialButton(
                               color: Theme.of(context).accentColor,
-                              onPressed: () {},
+                              onPressed: () => addNote(),
                               child: Text('Kaydet', style: TextStyle(color: Colors.white),),
                             ),
                           ),
@@ -293,31 +302,23 @@ class _NoteDetailPageState extends State<NoteDetailPage> {
     });
   }
 
-  Widget titleWidget(String title) =>
-      Container(
-        margin: EdgeInsets.symmetric(vertical: 5),
-        padding: EdgeInsets.symmetric(vertical: 10),
-        child: Container(
-          child: Column(
-            children: [
-              Row(
-                children: [
-                  Icon(
-                    Icons.brightness_1,
-                    size: 15,
-                    color: Theme
-                        .of(context)
-                        .primaryColor,
-                  ),
-                  SizedBox(width: 5),
-                  Text(title,
-                      style:
-                      TextStyle(fontSize: 22, fontWeight: FontWeight.bold))
-                ],
+  void addNote() async {
+
+    if(formKey.currentState.validate()) {
+      formKey.currentState.save();
+
+      var currentDate = DateTime.now();
+
+      int result = await dbHelper.addNote(Note(selectedCategoryId, noteTitle, noteContent, currentDate.toString(), sliderValue.toInt()));
+      result != -1
+          ? Navigator.of(context).pop()
+          : Scaffold.of(context).showSnackBar(SnackBar(
+              content: Text('Not eklenemedi.'),
+              duration: Duration(
+                seconds: 2,
               ),
-              Divider(thickness: 2)
-            ],
-          ),
-        ),
-      );
+            ));
+    }
+
+  }
 }

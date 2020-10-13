@@ -5,7 +5,7 @@ class Note {
   String noteTitle;
   String noteContent;
   String noteDate;
-  String noteImportance;
+  int noteImportance;
 
   // Verileri yazarken
   Note(
