@@ -1,11 +1,17 @@
 import 'package:flutter/material.dart';
 
-import 'package:weather_forecast/components/last_update_widget.dart';
-import 'package:weather_forecast/components/location_widget.dart';
-import 'package:weather_forecast/components/temperature_range_widget.dart';
-import 'package:weather_forecast/components/weather_state_image_widget.dart';
+import 'package:weather_forecast/components/pages/select_city_page.dart';
 
-class WeatherApp extends StatelessWidget {
+import 'package:weather_forecast/components/widgets/last_update_widget.dart';
+import 'package:weather_forecast/components/widgets/location_widget.dart';
+import 'package:weather_forecast/components/widgets/temperature_range_widget.dart';
+import 'package:weather_forecast/components/widgets/weather_state_image_widget.dart';
+
+
+class HomePage extends StatelessWidget {
+
+  String selectedCity = 'Bilecik';
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -15,7 +21,12 @@ class WeatherApp extends StatelessWidget {
         actions: [
           IconButton(
               icon: Icon(Icons.search),
-              onPressed: () {}
+              onPressed: () async {
+
+                selectedCity = await Navigator.push(context, MaterialPageRoute(builder: (context) => SelectCityPage()));
+                // debugPrint(selectedCity);
+
+              }
           ),
         ],
       ),
@@ -27,7 +38,9 @@ class WeatherApp extends StatelessWidget {
             Container(
               padding: EdgeInsets.all(10),
                 child: Center(
-                    child: LocationWidget()
+                    child: LocationWidget(
+                      selectedCity: selectedCity,
+                    )
                 )
             ),
 

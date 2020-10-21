@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:weather_forecast/components/home_page.dart';
+import 'package:weather_forecast/components/pages/home_page.dart';
 
 void main() {
   runApp(MyApp());
@@ -15,7 +15,7 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      home: WeatherApp(),
+      home: HomePage(),
     );
   }
 }
