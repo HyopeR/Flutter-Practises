@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:weather_forecast/components/structure_bloc/pages/home_page.dart';
 import 'package:weather_forecast/components/structure_provider/pages/home_page.dart';
 import 'package:weather_forecast/locator.dart';
+import 'package:weather_forecast/stores/store_bloc/theme/theme_bloc.dart';
 import 'package:weather_forecast/stores/store_bloc/weather_bloc.dart';
 
 void main() {
@@ -22,8 +23,15 @@ class MyApp extends StatelessWidget {
       initialRoute: '/',
       routes: {
         '/': (context) => NavigateClass(),
-        '/blocPattern': (context) => BlocProvider(
-            create: (context) => WeatherBloc(),
+        '/blocPattern': (context) => MultiBlocProvider(
+          providers: [
+            BlocProvider<WeatherBloc>(
+              create: (context) => WeatherBloc(),
+            ),
+            BlocProvider<ThemeBloc>(
+              create: (context) => ThemeBloc(),
+            )
+          ],
             child: HomePageBloc()
         ),
         '/providerPackage': (context) => HomePageProvider(),
