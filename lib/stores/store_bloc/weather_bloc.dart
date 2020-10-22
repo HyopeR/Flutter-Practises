@@ -5,7 +5,7 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:weather_forecast/locator.dart';
 import 'package:weather_forecast/models/weather.dart';
-import 'package:weather_forecast/repositories/weather_repository.dart';
+import 'package:weather_forecast/data/weather_repository.dart';
 
 part 'weather_event.dart';
 part 'weather_state.dart';
