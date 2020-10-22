@@ -6,9 +6,10 @@ class WeatherRepository {
 
   WeatherApiClient weatherApiClient = locator<WeatherApiClient>();
 
-  Future<Weather> getWeather(String city) async {
+  Future<Weather> getWeather(String cityName) async {
 
-    // weatherApiClient
+    final int cityId = await weatherApiClient.getLocationId(cityName);
+    return weatherApiClient.getWeather(cityId);
 
   }
 

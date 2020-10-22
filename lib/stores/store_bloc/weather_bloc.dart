@@ -12,10 +12,9 @@ part 'weather_state.dart';
 
 class WeatherBloc extends Bloc<WeatherEvent, WeatherState> {
 
-  WeatherRepository weatherRepo = locator.get()<WeatherRepository>();
-  // WeatherRepository weatherRepo = locator<WeatherRepository>();
+  WeatherRepository weatherRepo = locator<WeatherRepository>();
 
-  WeatherBloc() : super(WeatherInitial());
+  WeatherBloc() : super(WeatherInitialState());
 
   @override
   Stream<WeatherState> mapEventToState(WeatherEvent event) async* {
