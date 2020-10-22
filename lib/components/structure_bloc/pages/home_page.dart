@@ -24,13 +24,14 @@ class _HomePageBlocState extends State<HomePageBloc> {
 
   @override
   void initState() {
-    super.initState();
+    print('Init state');
     _weatherBloc = BlocProvider.of<WeatherBloc>(context);
-
+    super.initState();
   }
 
   @override
   void dispose() {
+    print('Dispose');
     _weatherBloc.close();
     super.dispose();
   }
@@ -47,7 +48,7 @@ class _HomePageBlocState extends State<HomePageBloc> {
               onPressed: () async {
 
                 selectedCity = await Navigator.push(context, MaterialPageRoute(builder: (context) => SelectCityPage()));
-                // debugPrint(selectedCity);
+                debugPrint(selectedCity);
 
                 if(selectedCity != null) {
                   _weatherBloc.add(FetchWeatherEvent(cityName: selectedCity));
@@ -81,7 +82,7 @@ class _HomePageBlocState extends State<HomePageBloc> {
                       padding: EdgeInsets.all(10),
                       child: Center(
                           child: LocationWidget(
-                            selectedCity: selectedCity,
+                            selectedCity: weather.title,
                           )
                       )
                   ),
