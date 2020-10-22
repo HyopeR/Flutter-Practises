@@ -1,12 +1,17 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:provider/provider.dart';
 
 import 'package:weather_forecast/components/structure_bloc/pages/home_page.dart';
 import 'package:weather_forecast/components/structure_provider/pages/home_page.dart';
-import 'package:weather_forecast/locator.dart';
+
 import 'package:weather_forecast/stores/store_bloc/theme/theme_bloc.dart';
 import 'package:weather_forecast/stores/store_bloc/weather_bloc.dart';
+
+import 'package:weather_forecast/locator.dart';
+import 'package:weather_forecast/stores/store_provider/weather_view_model.dart';
+
 
 void main() {
   setup();
@@ -34,7 +39,12 @@ class MyApp extends StatelessWidget {
           ],
             child: HomePageBloc()
         ),
-        '/providerPackage': (context) => HomePageProvider(),
+        '/providerPackage': (context) => MultiProvider(
+          providers: [
+            Provider<WeatherViewModel>(create: (context) => WeatherViewModel()),
+          ],
+            child: HomePageProvider()
+        ),
       },
       onUnknownRoute: (RouteSettings settings) =>
           MaterialPageRoute(builder: (context) => NavigateClass()),
