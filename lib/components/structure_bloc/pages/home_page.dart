@@ -76,39 +76,44 @@ class _HomePageBlocState extends State<HomePageBloc> {
 
               final weather = state.weather;
 
-              return ListView(
-                children: [
-                  Container(
-                      padding: EdgeInsets.all(10),
-                      child: Center(
-                          child: LocationWidget(
-                            selectedCity: weather.title,
-                          )
-                      )
-                  ),
+              return RefreshIndicator(
+                onRefresh: () async {
+                  _weatherBloc.add(RefreshWeatherEvent(cityName: selectedCity));
+                },
+                child: ListView(
+                  children: [
+                    Container(
+                        padding: EdgeInsets.all(10),
+                        child: Center(
+                            child: LocationWidget(
+                              selectedCity: weather.title,
+                            )
+                        )
+                    ),
 
-                  Container(
-                      padding: EdgeInsets.all(10),
-                      child: Center(
-                          child: LastUpdateWidget()
-                      )
-                  ),
+                    Container(
+                        padding: EdgeInsets.all(10),
+                        child: Center(
+                            child: LastUpdateWidget()
+                        )
+                    ),
 
-                  Container(
-                      padding: EdgeInsets.all(10),
-                      child: Center(
-                          child: WeatherStateImageWidget()
-                      )
-                  ),
+                    Container(
+                        padding: EdgeInsets.all(10),
+                        child: Center(
+                            child: WeatherStateImageWidget()
+                        )
+                    ),
 
-                  Container(
-                      padding: EdgeInsets.all(20),
-                      child: Center(
-                          child: TemperatureRangeWidget()
-                      )
-                  ),
+                    Container(
+                        padding: EdgeInsets.all(20),
+                        child: Center(
+                            child: TemperatureRangeWidget()
+                        )
+                    ),
 
-                ],
+                  ],
+                ),
               );
             }
 

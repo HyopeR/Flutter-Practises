@@ -32,6 +32,17 @@ class WeatherBloc extends Bloc<WeatherEvent, WeatherState> {
 
       }
       
+    } else if(event is RefreshWeatherEvent) {
+
+      try {
+        final Weather getWeather = await weatherRepo.getWeather(event.cityName);
+        yield WeatherLoadedState(weather: getWeather);
+
+      } catch(err) {
+        yield state;
+
+      }
+
     }
     
   }
