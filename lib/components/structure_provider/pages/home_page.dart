@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 
-import 'package:weather_forecast/components/pages/select_city_page.dart';
+import 'package:weather_forecast/components/structure_provider/pages/select_city_page.dart';
 
-import 'package:weather_forecast/components/widgets/last_update_widget.dart';
-import 'package:weather_forecast/components/widgets/location_widget.dart';
-import 'package:weather_forecast/components/widgets/temperature_range_widget.dart';
-import 'package:weather_forecast/components/widgets/weather_state_image_widget.dart';
+import 'package:weather_forecast/components/structure_provider/widgets/last_update_widget.dart';
+import 'package:weather_forecast/components/structure_provider/widgets/location_widget.dart';
+import 'package:weather_forecast/components/structure_provider/widgets/temperature_range_widget.dart';
+import 'package:weather_forecast/components/structure_provider/widgets/weather_state_image_widget.dart';
 
 
-class HomePage extends StatelessWidget {
+class HomePageProvider extends StatelessWidget {
 
   String selectedCity = 'Bilecik';
 
@@ -16,7 +16,7 @@ class HomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Weather Forecast'),
+        title: Text('Weather Forecast Provider'),
         centerTitle: true,
         actions: [
           IconButton(
