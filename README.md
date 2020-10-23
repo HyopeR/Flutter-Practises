@@ -7,5 +7,5 @@ Simple flutter projects are included under this repository.
 <h3><a href="https://github.com/HyopeR/Flutter-Practises/tree/FashionApp">3- Fashion App</a></h3>
 <h3><a href="https://github.com/HyopeR/Flutter-Practises/tree/Pokedex">4- Pokedex</a></h3>
 <h3><a href="https://github.com/HyopeR/Flutter-Practises/tree/NotebookApp">5- Notebook App</a></h3>
-<h3><a href="https://github.com/HyopeR/Flutter-Practises/tree/WeatherForecast">6- Weather Forecast (<h4>Bloc Pattern and Provider Package Example</h4>)</a></h3>
+<h3><a href="https://github.com/HyopeR/Flutter-Practises/tree/WeatherForecast">6- Weather Forecast (State Management) (Bloc Pattern and Provider Package Example)</a></h3>
 
