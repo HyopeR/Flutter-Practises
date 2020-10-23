@@ -38,4 +38,17 @@ class WeatherViewModel with ChangeNotifier {
     return _weather;
   }
 
+
+  Future<Weather> refreshWeather({@required String cityName}) async {
+
+    try{
+      _weather = await _weatherRepo.getWeather(cityName);
+      state = WeatherState.WeatherLoadedState;
+    }catch(err) {
+
+    }
+
+    return _weather;
+  }
+
 }

@@ -10,6 +10,7 @@ import 'package:weather_forecast/stores/store_bloc/theme/theme_bloc.dart';
 import 'package:weather_forecast/stores/store_bloc/weather_bloc.dart';
 
 import 'package:weather_forecast/locator.dart';
+import 'package:weather_forecast/stores/store_provider/theme_view_model.dart';
 import 'package:weather_forecast/stores/store_provider/weather_view_model.dart';
 
 
@@ -41,7 +42,10 @@ class MyApp extends StatelessWidget {
         ),
         '/providerPackage': (context) => MultiProvider(
           providers: [
-            ChangeNotifierProvider<WeatherViewModel>(create: (context) => WeatherViewModel()),
+            // ChangeNotifierProvider<WeatherViewModel>(create: (context) => WeatherViewModel()),
+            // ChangeNotifierProvider<ThemeViewModel>(create: (context) => ThemeViewModel()),
+            ChangeNotifierProvider<WeatherViewModel>.value(value: WeatherViewModel()),
+            ChangeNotifierProvider<ThemeViewModel>.value(value: ThemeViewModel()),
           ],
             child: HomePageProvider()
         ),
