@@ -21,12 +21,6 @@ class _HomePageProviderState extends State<HomePageProvider> {
   WeatherViewModel _weatherView;
 
   @override
-  void initState() {
-    super.initState();
-    _weatherView = Provider.of<WeatherViewModel>(context);
-  }
-
-  @override
   void dispose() {
     _weatherView.dispose();
     super.dispose();
@@ -34,6 +28,7 @@ class _HomePageProviderState extends State<HomePageProvider> {
 
   @override
   Widget build(BuildContext context) {
+    _weatherView = Provider.of<WeatherViewModel>(context);
     return Theme(
       data: ThemeData(),
       child: Scaffold(
@@ -47,50 +42,81 @@ class _HomePageProviderState extends State<HomePageProvider> {
 
                   selectedCity = await Navigator.push(context, MaterialPageRoute(builder: (context) => SelectCityPage()));
                   // debugPrint(selectedCity);
-
+                  _weatherView.getWeather(cityName: selectedCity);
                 }
             ),
           ],
         ),
 
         body: Container(
-          child: ListView(
-            children: [
-
-              Container(
-                padding: EdgeInsets.all(10),
-                  child: Center(
-                      child: LocationWidget(
-                        selectedCity: selectedCity,
-                      )
-                  )
-              ),
-
-              Container(
-                  padding: EdgeInsets.all(10),
-                  child: Center(
-                      child: LastUpdateWidget()
-                  )
-              ),
-
-              Container(
-                  padding: EdgeInsets.all(10),
-                  child: Center(
-                      child: WeatherStateImageWidget()
-                  )
-              ),
-
-              Container(
-                  padding: EdgeInsets.all(20),
-                  child: Center(
-                      child: TemperatureRangeWidget()
-                  )
-              ),
-
-            ],
-          ),
+          child: PageChange(),
         ),
       ),
     );
   }
+
+  Widget PageChange() {
+
+    switch(_weatherView.state) {
+      case(WeatherState.WeatherInitialState):
+        return Center(child: Text('Şehir seçiniz.'));
+        break;
+
+      case(WeatherState.WeatherLoadingState):
+        return Center(child: CircularProgressIndicator());
+        break;
+
+      case(WeatherState.WeatherLoadedState):
+        return ListView(
+          children: [
+
+            Container(
+                padding: EdgeInsets.all(10),
+                child: Center(
+                    child: LocationWidget(
+                      selectedCity: _weatherView.weather.title,
+                    )
+                )
+            ),
+
+            Container(
+                padding: EdgeInsets.all(10),
+                child: Center(
+                    child: LastUpdateWidget()
+                )
+            ),
+
+            Container(
+                padding: EdgeInsets.all(10),
+                child: Center(
+                    child: WeatherStateImageWidget()
+                )
+            ),
+
+            Container(
+                padding: EdgeInsets.all(20),
+                child: Center(
+                    child: TemperatureRangeWidget()
+                )
+            ),
+
+          ],
+        );
+        break;
+
+      case(WeatherState.WeatherErrorState):
+        return Center(child: Text('Bir hata oluştu.'));
+        break;
+
+      default:
+        return Container();
+        break;
+
+    }
+
+
+
+  }
 }
+
+

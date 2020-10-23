@@ -41,7 +41,7 @@ class MyApp extends StatelessWidget {
         ),
         '/providerPackage': (context) => MultiProvider(
           providers: [
-            Provider<WeatherViewModel>(create: (context) => WeatherViewModel()),
+            ChangeNotifierProvider<WeatherViewModel>(create: (context) => WeatherViewModel()),
           ],
             child: HomePageProvider()
         ),
