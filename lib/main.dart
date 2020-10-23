@@ -80,8 +80,9 @@ class NavigateClass extends StatelessWidget {
               children: <Widget>[
 
                 Container(
-                  child: Text('Hava durumu uygulaması State Management için kullanılan 2 yapının denemesi için yapılmıştır.'
-                      'Bu yapılardan biri Provider paketi, diğeri ise Bloc Pattern yapısıdr.', textAlign: TextAlign.center,),
+                  child: Text('Hava durumu uygulaması State Management için kullanılan iki farklı yapının denemesi için yapılmıştır.'
+                      ' Bu yapılar;\n\n1. Provider Paketi\n2. Bloc Pattern Yapısı', textAlign: TextAlign.center,
+                  style: TextStyle(fontSize: 18)),
                 ),
 
                 Container(
